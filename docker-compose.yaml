@@ -1,0 +1,70 @@
+version: "3.6"
+
+services:
+  zk_node1:
+    image: zookeeper:3.4
+    container_name: zk_node1
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zk_node1:2888:3888 server.3=zk_node3:2888:3888 server.4=zk_node4:2888:3888 server.5=zk_node5:2888:3888
+    networks:
+      zk_net:
+        ipv4_address: 172.22.10.11
+  zk_node2:
+    image: zookeeper:3.4
+    container_name: zk_node2
+    restart: always
+    ports:
+      - "2182:2181"
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zk_node1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zk_node3:2888:3888 server.3=zk_node4:2888:3888 server.5=zk_node5:2888:3888
+    networks:
+      zk_net:
+        ipv4_address: 172.22.10.12
+  zk_node3:
+    image: zookeeper:3.4
+    container_name: zk_node3
+    restart: always
+    ports:
+      - "2183:2181"
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zk_node1:2888:3888 server.2=zk_node2:2888:3888 server.3=0.0.0.0:2888:3888 server.4=zk_node4:2888:3888 server.5=zk_node5:2888:3888
+    networks:
+      zk_net:
+        ipv4_address: 172.22.10.13
+  zk_node4:
+    image: zookeeper:3.4
+    container_name: zk_node4
+    restart: always
+    ports:
+      - "2184:2181"
+    environment:
+      ZOO_MY_ID: 4
+      ZOO_SERVERS: server.1=zk_node1:2888:3888 server.2=zk_node2:2888:3888 server.3=zk_node3:2888:3888 server.4=0.0.0.0:2888:3888 server.5=zk_node5:2888:3888
+    networks:
+      zk_net:
+        ipv4_address: 172.22.10.14
+  zk_node5:
+    image: zookeeper:3.4
+    container_name: zk_node5
+    restart: always
+    ports:
+      - "2185:2181"
+    environment:
+      ZOO_MY_ID: 5
+      ZOO_SERVERS: server.1=zk_node1:2888:3888 server.2=zk_node2:2888:3888 server.3=zk_node3:2888:3888 server.4=zk_node4:2888:3888 server.5=0.0.0.0:2888:3888
+    networks:
+      zk_net:
+        ipv4_address: 172.22.10.15
+
+networks:
+  zk_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.22.0.0/16
