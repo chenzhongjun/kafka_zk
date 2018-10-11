@@ -1,69 +1,82 @@
-version: "3.6"
-
+version: '2'
 services:
-  zk_node1:
+  zk1:
     image: zookeeper:3.4
-    container_name: zk_node1
-    restart: always
+    container_name: zk1
     ports:
       - "2181:2181"
+    networks:
+      zk_kf:
+        ipv4_address: 172.22.10.11
     environment:
       ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zk_node1:2888:3888 server.3=zk_node3:2888:3888 server.4=zk_node4:2888:3888 server.5=zk_node5:2888:3888
-    networks:
-      zk_net:
-        ipv4_address: 172.22.10.11
-  zk_node2:
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+  zk2:
     image: zookeeper:3.4
-    container_name: zk_node2
-    restart: always
+    container_name: zk2
     ports:
       - "2182:2181"
+    networks:
+      zk_kf:
+        ipv4_address: 172.22.10.12
     environment:
       ZOO_MY_ID: 2
-      ZOO_SERVERS: server.1=zk_node1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zk_node3:2888:3888 server.3=zk_node4:2888:3888 server.5=zk_node5:2888:3888
-    networks:
-      zk_net:
-        ipv4_address: 172.22.10.12
-  zk_node3:
+      ZOO_SERVERS: server.1=zk1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zk3:2888:3888
+  zk3:
     image: zookeeper:3.4
-    container_name: zk_node3
-    restart: always
+    container_name: zk3
     ports:
       - "2183:2181"
+    networks:
+      zk_kf:
+        ipv4_address: 172.22.10.13
     environment:
       ZOO_MY_ID: 3
-      ZOO_SERVERS: server.1=zk_node1:2888:3888 server.2=zk_node2:2888:3888 server.3=0.0.0.0:2888:3888 server.4=zk_node4:2888:3888 server.5=zk_node5:2888:3888
-    networks:
-      zk_net:
-        ipv4_address: 172.22.10.13
-  zk_node4:
-    image: zookeeper:3.4
-    container_name: zk_node4
-    restart: always
+      ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=0.0.0.0:2888:3888
+  kafka1:
+    image: wurstmeister/kafka:2.11-2.0.0
+    container_name: kafka1
     ports:
-      - "2184:2181"
+      - "9092:9092"
     environment:
-      ZOO_MY_ID: 4
-      ZOO_SERVERS: server.1=zk_node1:2888:3888 server.2=zk_node2:2888:3888 server.3=zk_node3:2888:3888 server.4=0.0.0.0:2888:3888 server.5=zk_node5:2888:3888
+      KAFKA_ADVERTISED_HOST_NAME: 172.22.20.11
+      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: 172.22.10.11:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      zk_net:
-        ipv4_address: 172.22.10.14
-  zk_node5:
-    image: zookeeper:3.4
-    container_name: zk_node5
-    restart: always
+      zk_kf:
+        ipv4_address: 172.22.20.11
+  kafka2:
+    image: wurstmeister/kafka:2.11-2.0.0
+    container_name: kafka2
     ports:
-      - "2185:2181"
+      - "9093:9092"
     environment:
-      ZOO_MY_ID: 5
-      ZOO_SERVERS: server.1=zk_node1:2888:3888 server.2=zk_node2:2888:3888 server.3=zk_node3:2888:3888 server.4=zk_node4:2888:3888 server.5=0.0.0.0:2888:3888
+      KAFKA_ADVERTISED_HOST_NAME: 172.22.20.12
+      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: 172.22.10.12:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      zk_net:
-        ipv4_address: 172.22.10.15
-
+      zk_kf:
+        ipv4_address: 172.22.20.12
+  kafka3:
+    image: wurstmeister/kafka:2.11-2.0.0
+    container_name: kafka3
+    ports:
+      - "9094:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 172.22.20.13
+      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: 172.22.10.13:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      zk_kf:
+        ipv4_address: 172.22.20.13
 networks:
-  zk_net:
+  zk_kf:
     ipam:
       driver: default
       config:
