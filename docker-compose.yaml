@@ -84,6 +84,18 @@ services:
     networks:
       zk_kf:
         ipv4_address: 172.22.20.13
+  python3:
+    image: python:3.6-slim-stretch
+    container_name: python3
+    hostname: eclipse
+    working_dir: /home/python3
+    command: tail -f /dev/null
+    volumes:
+      - "./scripts:/home/python3"  
+    networks:
+      zk_kf:
+        ipv4_address: 172.22.30.10
+
 networks:
   zk_kf:
     ipam:
