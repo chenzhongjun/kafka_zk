@@ -44,7 +44,7 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.22.20.11:9092
       KAFKA_CREATE_TOPICS: "test:1:1"
-      KAFKA_ZOOKEEPER_CONNECT: 172.22.10.11:2181
+      KAFKA_ZOOKEEPER_CONNECT: 172.22.10.11:2181, 172.22.10.12:2181, 172.22.10.13:2181
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
@@ -61,7 +61,7 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.22.20.12:9092
       KAFKA_CREATE_TOPICS: "test:1:1"
-      KAFKA_ZOOKEEPER_CONNECT: 172.22.10.12:2181
+      KAFKA_ZOOKEEPER_CONNECT: 172.22.10.12:2181, 172.22.10.12:2181, 172.22.10.13:2181    
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
@@ -78,7 +78,7 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.22.20.13:9092
       KAFKA_CREATE_TOPICS: "test:1:1"
-      KAFKA_ZOOKEEPER_CONNECT: 172.22.10.13:2181
+      KAFKA_ZOOKEEPER_CONNECT: 172.22.10.13:2181, 172.22.10.12:2181, 172.22.10.13:2181    
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
